@@ -4,21 +4,59 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Avalanche Wallet Connect</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="container">
-      <h1>❄️ Avalanche dApp</h1>
-      <p class="subtitle">Connect Wallet (Core Wallet)</p>
+    <div class="bg-shape1"></div>
+    <div class="bg-shape2"></div>
 
-      <button id="connectBtn">Connect Wallet</button>
+    <div class="container glass-effect">
+      <div class="header">
+          <h1>Avalanche dApp</h1>
+          <p class="subtitle">Web3 Fundamental Day 1</p>
+      </div>
 
-      <div class="card">
-        <p><strong>Status:</strong> <span id="status">Not Connected</span></p>
-        <p><strong>Wallet Address:</strong></p>
-        <p id="address">-</p>
-        <p><strong>Network:</strong> <span id="network">-</span></p>
-        <p><strong>Balance:</strong> <span id="balance">-</span> AVAX</p>
+      <button id="connectBtn" class="glow-on-hover">
+          <span>Connect Wallet</span>
+      </button>
+
+      <div class="info-card glass-effect-inner">
+        <div class="data-row">
+            <span class="label">Status</span>
+            <span id="status" class="value status-indicator">Not Connected</span>
+        </div>
+        
+        <div class="data-row address-row">
+            <span class="label">Address</span>
+            <span id="address" class="value address-box">-</span>
+        </div>
+        
+        <div class="data-row">
+            <span class="label">Network</span>
+            <span id="network" class="value">-</span>
+        </div>
+
+        <div class="data-row">
+            <span class="label">Balance</span>
+            <span class="value"><span id="balance">-</span> AVAX</span>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="student-info">
+            <p class="student-label">Student Info</p>
+            <div class="data-row slim">
+                <span class="label">Nama</span>
+                <span id="studentName" class="value highlight-text">-</span>
+            </div>
+            <div class="data-row slim">
+                <span class="label">NIM</span>
+                <span id="studentNim" class="value highlight-text">-</span>
+            </div>
+        </div>
       </div>
     </div>
 

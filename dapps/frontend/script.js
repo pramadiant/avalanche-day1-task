@@ -1,15 +1,25 @@
+// --- KONFIGURASI MAHASISWA (WAJIB GANTI) ---
+const MY_NAME = "Adi Pramadianto Putra"; 
+const MY_NIM = "231011401040"; 
+
 const connectBtn = document.getElementById("connectBtn");
 const statusEl = document.getElementById("status");
 const addressEl = document.getElementById("address");
 const networkEl = document.getElementById("network");
 const balanceEl = document.getElementById("balance");
+const studentNameEl = document.getElementById("studentName");
+const studentNimEl = document.getElementById("studentNim");
 
 // Avalanche Fuji Testnet chainId (hex)
 const AVALANCHE_FUJI_CHAIN_ID = "0xa869";
 
+// Set Nama & NIM saat halaman dimuat
+// Kita tambahkan pengecekan null jaga-jaga kalau elemen belum termuat
+if (studentNameEl) studentNameEl.textContent = MY_NAME;
+if (studentNimEl) studentNimEl.textContent = MY_NIM;
+
 function formatAvaxBalance(balanceWei) {
   const balance = parseInt(balanceWei, 16);
-  console.log({ balance });
   return (balance / 1e18).toFixed(4);
 }
 
@@ -19,10 +29,10 @@ async function connectWallet() {
     return;
   }
 
-  console.log("window.ethereum", window.ethereum);
-
   try {
     statusEl.textContent = "Connecting...";
+    connectBtn.disabled = true; // Disable tombol pas loading
+    connectBtn.innerHTML = "Connecting...";
 
     // Request wallet accounts
     const accounts = await window.ethereum.request({
@@ -32,19 +42,18 @@ async function connectWallet() {
     const address = accounts[0];
     addressEl.textContent = address;
 
-    console.log({ address });
-
     // Get chainId
     const chainId = await window.ethereum.request({
       method: "eth_chainId",
     });
 
-    console.log({ chainId });
-
     if (chainId === AVALANCHE_FUJI_CHAIN_ID) {
       networkEl.textContent = "Avalanche Fuji Testnet";
       statusEl.textContent = "Connected ✅";
-      statusEl.style.color = "#4cd137";
+      
+      // Warna hijau diatur via CSS class di index.html, 
+      // tapi kita paksa warnanya disini biar sesuai logika lama
+      statusEl.style.color = "#4cd137"; 
 
       // Get AVAX balance
       const balanceWei = await window.ethereum.request({
@@ -52,18 +61,25 @@ async function connectWallet() {
         params: [address, "latest"],
       });
 
-      console.log({ balanceWei });
-
       balanceEl.textContent = formatAvaxBalance(balanceWei);
+      
+      // Ubah tombol jadi 'Connected'
+      connectBtn.innerHTML = "Wallet Connected";
+
     } else {
       networkEl.textContent = "Wrong Network ❌";
-      statusEl.textContent = "Please switch to Avalanche Fuji";
-      statusEl.style.color = "#fbc531";
+      statusEl.textContent = "Switch to Fuji Testnet";
+      statusEl.style.color = "#fbc531"; // Kuning warning
       balanceEl.textContent = "-";
+      connectBtn.disabled = false;
+      connectBtn.innerHTML = "Connect Wallet";
     }
   } catch (error) {
     console.error(error);
-    statusEl.textContent = "Connection Failed ❌";
+    statusEl.textContent = "Connection Failed";
+    statusEl.style.color = "#e84142"; // Merah error
+    connectBtn.disabled = false;
+    connectBtn.innerHTML = "Connect Wallet";
   }
 }
 
