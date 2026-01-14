@@ -2,19 +2,38 @@
 pragma solidity ^0.8.20;
 
 contract SimpleStorage {
-    // saya ingin menyimpan sebuah nilai dalam bentuk uint256
-    uint256 private storedValue;
+    // --- State Variables ---
+    uint256 private storedValue; // Tempat nyimpen angka
+    address public owner;        // Task 1: Nyimpen alamat Owner
 
-    // ketika ada update saya akan track perubahannya
+    // --- Events (Log) ---
+    // Task 2: Event buat validasi
     event ValueUpdated(uint256 newValue);
+    event OwnerSet(address indexed newOwner);
 
-    // simpan nilai ke blockchain (write)
-    function setValue(uint256 _value) public {
-        storedValue = _value;
-        emit ValueUpdated(_value);
+    // --- Constructor ---
+    // Jalan otomatis pas deploy
+    constructor() {
+        owner = msg.sender; // Yang deploy otomatis jadi BOS (Owner)
+        emit OwnerSet(owner);
     }
 
-    // membaca nilai dari blockchain (read) terakhir kali di update
+    // --- Modifier ---
+    // Task 4: Satpam penjaga pintu
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Hanya owner yang boleh ganti!");
+        _;
+    }
+
+    // --- Functions ---
+
+    // 1. Write Function (Pakai Gas & Diproteksi onlyOwner)
+    function setValue(uint256 _value) public onlyOwner {
+        storedValue = _value;
+        emit ValueUpdated(_value); // Emit event biar kebaca di Snowtrace
+    }
+
+    // 2. Read Function (Gratis)
     function getValue() public view returns (uint256) {
         return storedValue;
     }
